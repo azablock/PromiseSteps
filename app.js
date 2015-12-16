@@ -1,6 +1,8 @@
 var app = angular.module('chartApp', []);
 
-app.controller('SalesController', ['$scope', function ($scope) {
+app.controller('SalesController', SalesController);
+
+function SalesController($scope) {
     $scope.salesData = [
         {hour: 1, sales: 54},
         {hour: 2, sales: 66},
@@ -13,22 +15,27 @@ app.controller('SalesController', ['$scope', function ($scope) {
         {hour: 9, sales: 55},
         {hour: 10, sales: 30}
     ];
-}]);
+}
+
+SalesController.$inject = ['$scope'];
 
 app.directive('linearChart', function () {
 
     return {
-        restrict: 'EA',
-        template: "<svg width='800' height='600'></svg>",
+        restrict: 'E',
+        templateUrl: "chart-container.html",
         link: function (scope, elem, attrs) {
-            var salesDataToPlot = scope[attrs.chartData];
-            var padding = 20;
-            var xScale, yScale, xAxisGen, yAxisGen, lineFun;
+            var salesDataToPlot = scope[attrs.chartData],
+                padding = 20,
+                xScale,
+                yScale,
+                xAxisGen,
+                yAxisGen,
+                lineFun,
+                rawSvg = elem.find("svg")[0],
+                svg = d3.select(rawSvg);
 
-            var rawSvg = elem.find("svg")[0];
-            var svg = d3.select(rawSvg);
-
-            function setChartParameters(){
+            function setChartParameters() {
                 xScale = d3.scale.linear()
                     .domain([salesDataToPlot[0].hour, salesDataToPlot[salesDataToPlot.length - 1].hour])
                     .range([padding + 5, rawSvg.clientWidth - padding]);
@@ -83,6 +90,16 @@ app.directive('linearChart', function () {
             }
 
             drawLineChart();
+
+            svg.append("svg:path")
+                .attr('transform', 'translate(600, 60)')
+                .attr('class', 'hex')
+                .attr({
+                    d: d3.hexbin().hexagon(50),
+                    "stroke": "#111111",
+                    'stroke-width': 4,
+                    "fill": "#533333"
+                });
         }
     };
 });
