@@ -5,15 +5,22 @@
     <title>Promise Steps</title>
     <link href="node_modules/bootstrap/dist/css/bootstrap.css">
 </head>
-<body bgcolor="#474444">
+<body bgcolor="#585555">
 
-<div ng-app="chartApp" ng-controller="SalesController">
-    <linear-chart chart-data="salesData"></linear-chart>
+<div ng-controller="GridController">
+    <hexgrid width="grzyb" ng-repeat='position in hexPositions' ng-click="vm.dupa()" position={{position.position}} ng-model='position'></hexgrid>
 </div>
+
+<div id='pSzemek-value'>###</div>
+<div id='mariusz-value'>###</div>
+
+<script src='vendor/underscore.js' type="text/javascript"></script>
+<script src='vendor/q.js' type="text/javascript"></script>
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="node_modules/angular/angular.js"></script>
 <script src="vendor/hexbin.js"></script>
 <script src="app.js"></script>
 
+<script type="text/javascript" src='promise-example.js'></script>
 </body>
 </html>
